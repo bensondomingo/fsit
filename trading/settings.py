@@ -138,6 +138,18 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+# REST Framework Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
+
+AUTHENTICATION_API_ONLY = True
+
 # Setting for rest_auth.registration
 SITE_ID = 1
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False

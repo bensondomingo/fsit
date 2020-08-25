@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 from tradingapp.api.views import OrderAPIViewSet
 
 router = DefaultRouter()
-router.register('')
 router.register('order', OrderAPIViewSet, basename='order')
 
 urlpatterns = [

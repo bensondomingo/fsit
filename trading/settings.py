@@ -46,6 +46,16 @@ INSTALLED_APPS = [
 
     # authentication
     'rest_auth',
+
+    # registration
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+
+    'profiles.apps.ProfilesConfig',
+    'tradingapp.apps.TradingappConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -127,3 +137,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Setting for rest_auth.registration
+SITE_ID = 1
+ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'none'

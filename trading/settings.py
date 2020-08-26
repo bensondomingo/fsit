@@ -53,6 +53,10 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
 
+    # Do not remove. Causes exception when
+    # deleting a user instance on the admin page
+    'allauth.socialaccount',
+
     'profiles.apps.ProfilesConfig',
     'tradingapp.apps.TradingappConfig',
 

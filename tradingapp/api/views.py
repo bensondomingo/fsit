@@ -1,3 +1,6 @@
+from django.http import QueryDict
+from django.shortcuts import get_object_or_404
+
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import IsAuthenticated
@@ -6,7 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 from rest_framework import mixins
 
 from tradingapp.models import Order, Stock
-from tradingapp.api.serializers import OrderSerializer
+from tradingapp.api.serializers import OrderSerializer, StockSerializer
 
 
 class OrderAPIViewSet(GenericViewSet,
@@ -19,10 +22,15 @@ class OrderAPIViewSet(GenericViewSet,
     queryset = Order.objects.all()
 
     def get_queryset(self):
-        self.queryset.filter(trader=self.request.user.profile)
+        return self.queryset.filter(trader=self.request.user.profile)
+
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
-        data = request.POST.copy()
+        data = request.data
+        if isinstance(data, QueryDict):
+            data = data.copy()  # mutable
         quantity = int(data.get('quantity'))
         stock_obj = Stock.objects.get(id=data.get('stock'))
         profile_obj = request.user.profile
@@ -43,7 +51,13 @@ class OrderAPIViewSet(GenericViewSet,
             stock_obj.quantity -= quantity
             stock_obj.save()
         else:
-            pass
+            # Add the sell order amount to the trader's balance
+            profile_obj.balance += data.get('amount')
+            profile_obj.save()
+            # Return the stocks quantity
+            stock_obj.quantity += quantity
+            stock_obj.save()
+
         order = s.create(s.validated_data)
         s = OrderSerializer(order)
 
@@ -53,5 +67,9 @@ class OrderAPIViewSet(GenericViewSet,
 class StockAPIViewSet(GenericViewSet,
                       mixins.ListModelMixin,
                       mixins.CreateModelMixin,
+                      mixins.RetrieveModelMixin,
                       mixins.UpdateModelMixin):
-    pass
+
+    serializer_class = StockSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Stock.objects.all()

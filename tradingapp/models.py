@@ -3,7 +3,7 @@ from profiles.models import Profile
 
 
 class Stock(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=10, unique=True)
     price = models.FloatField()
 
     # Added fields

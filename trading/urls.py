@@ -28,5 +28,8 @@ urlpatterns = [
          include('rest_auth.registration.urls')),
 
     # Trading app
-    path('tradingapp/', include('tradingapp.urls'))
+    path('tradingapp/', include('tradingapp.urls')),
+
+    # Profiles app
+    path('profile/', include('profiles.urls')),
 ]

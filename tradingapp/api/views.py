@@ -17,9 +17,9 @@ class OrderAPIViewSet(GenericViewSet,
                       mixins.CreateModelMixin,
                       mixins.RetrieveModelMixin):
 
-    serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
     queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
     def get_queryset(self):
         return self.queryset.filter(trader=self.request.user.profile)

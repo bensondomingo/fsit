@@ -10,8 +10,9 @@ def create_profile(sender, instance, created, **kwargs):
     """ Create a new profile for new user instance """
 
     if instance.is_superuser:
+        # superuser account is not intended for trading
         return
 
     if created:
-        # Create a new profile for new users
-        Profile.objects.create(user=instance)
+        # Create a new profile for new users with 100 trading bonus :)
+        Profile.objects.create(user=instance, balance=100)

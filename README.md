@@ -10,7 +10,12 @@ Please build a simple trading system as a pure REST API with the endpoints outli
 
 ## Assumptions
 
-- There are already existing Stocks that traders can buy or sell. (Stock objects can be created through the Django admin panel or through the stock create endpoint.)
+- There are already existing Stocks that traders can buy or sell.
+
+  > Stocks can be created through the `createstock` management command named which requires three postitional arguments `name`, `price`, and `quantity`. Example command: `python manage.py createstock MCHP 85.6 100` will store a new stock entry on the database.
+
+- Endpoints requires authenticated access. Use the `/rest-auth/login/` endpoint to secure auth token then add it on the Authorization header. Example: `Authorization Token 9a49cf05c4be8e4c33c9d915808f180e44ae2452`
+  > To register for an account use `/rest-auth/registration/`. More details below.
 
 ## Required Endpoints
 

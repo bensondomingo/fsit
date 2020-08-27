@@ -15,7 +15,7 @@ class Stock(models.Model):
         ordering = ('name',)
 
     def __str__(self) -> str:
-        return f'{self.name} - {self.price}'
+        return f'{self.name}: {self.price}'
 
     @property
     def is_avaliable(self):

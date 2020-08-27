@@ -32,7 +32,7 @@ class OrderAPIViewSet(GenericViewSet,
         if isinstance(data, QueryDict):
             data = data.copy()  # mutable
         quantity = int(data.get('quantity'))
-        stock_obj = Stock.objects.get(id=data.get('stock'))
+        stock_obj = get_object_or_404(Stock, id=data.get('stock'))
         profile_obj = request.user.profile
         data.update({
             'trader': profile_obj.id,

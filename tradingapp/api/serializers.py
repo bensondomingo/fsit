@@ -20,14 +20,24 @@ class StockSerializer(serializers.ModelSerializer):
         sell = trader.orders.filter(order_type='sell', stock=instance)
 
         buy_amount = buy.aggregate(Sum('amount')).get('amount__sum')
+        bought_shares = buy.aggregate(Sum('quantity')).get('quantity__sum')
         if sell.count() == 0:
             sell_amount = 0
+            sold_shares = 0
         else:
             sell_amount = sell.aggregate(Sum('amount')).get('amount__sum')
+            sold_shares = sell.aggregate(Sum('quantity')).get('quantity__sum')
         return {
-            'bought_amount': buy_amount,
-            'sold_amount': sell_amount,
-            'net_invested': buy_amount - sell_amount
+            'buy': {
+                'amount': buy_amount,
+                'shares': bought_shares
+            },
+            'sell': {
+                'amount': sell_amount,
+                'shares': sold_shares
+            },
+            'net_invested': buy_amount - sell_amount,
+            'net_shares': bought_shares - sold_shares
         }
 
 
@@ -82,5 +92,5 @@ class OrderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret['trader'] = str(instance.trader)
-        ret['stock'] = instance.stock.name
+        ret['stock_name'] = instance.stock.name
         return ret

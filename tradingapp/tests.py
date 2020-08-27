@@ -66,7 +66,7 @@ class TradingAppEndpointTestCase(APITestCase):
         endpoint = reverse(self.endpoint_order_list)
         data = {
             'order_type': order_type,
-            'stock': stock.id,
+            'stock': stock.name,
             'quantity': quantity
         }
         resp = self.client.post(endpoint, data)
@@ -308,7 +308,8 @@ class StockEndpointTestCase(TradingAppEndpointTestCase):
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 1})
+        endpoint = reverse(self.endpoint_stock_detail,
+                           kwargs={'name': self.TEST_STOCK_A})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -325,12 +326,14 @@ class StockEndpointTestCase(TradingAppEndpointTestCase):
         self.login_user(USERB.get('username'))
 
         # Retrieve TEST_STOCK_A
-        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 1})
+        endpoint = reverse(self.endpoint_stock_detail,
+                           kwargs={'name': self.TEST_STOCK_A})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         # Retrieve TEST_STOCK_B
-        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 2})
+        endpoint = reverse(self.endpoint_stock_detail,
+                           kwargs={'name': self.TEST_STOCK_B})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
@@ -344,7 +347,8 @@ class StockEndpointTestCase(TradingAppEndpointTestCase):
         trader = self.login_user(USERA.get('username')).profile
 
         # 1. Not invested
-        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 1})
+        endpoint = reverse(self.endpoint_stock_detail,
+                           kwargs={'name': self.TEST_STOCK_A})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         resp_data = resp.json()

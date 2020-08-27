@@ -32,7 +32,7 @@ class OrderAPIViewSet(GenericViewSet,
         if isinstance(data, QueryDict):
             data = data.copy()  # mutable
         quantity = int(data.get('quantity'))
-        stock_obj = get_object_or_404(Stock, id=data.get('stock'))
+        stock_obj = get_object_or_404(Stock, name=data.get('stock'))
         profile_obj = request.user.profile
         data.update({
             'trader': profile_obj.id,
@@ -66,10 +66,9 @@ class OrderAPIViewSet(GenericViewSet,
 
 class StockAPIViewSet(GenericViewSet,
                       mixins.ListModelMixin,
-                      mixins.CreateModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin):
+                      mixins.RetrieveModelMixin):
 
+    lookup_field = 'name'
     serializer_class = StockSerializer
     permission_classes = [IsAuthenticated]
     queryset = Stock.objects.all()

@@ -63,14 +63,14 @@ class OrderSerializer(serializers.ModelSerializer):
             # Get total shares owned by the trader
             bought_shares = trader.orders.filter(
                 order_type='buy',
-                stock__id=stock.id).aggregate(
+                stock__name=stock.name).aggregate(
                     Sum('quantity')).get('quantity__sum')
             if bought_shares is None:
                 raise ValidationError("You don't have any shares to sell.")
 
             sold_shares = trader.orders.filter(
                 order_type='sell',
-                stock__id=stock.id).aggregate(
+                stock__name=stock.name).aggregate(
                     Sum('quantity')).get('quantity__sum')
             bought_shares = bought_shares if bought_shares is not None else 0
             sold_shares = sold_shares if sold_shares is not None else 0
@@ -92,5 +92,4 @@ class OrderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret['trader'] = str(instance.trader)
-        ret['stock_name'] = instance.stock.name
         return ret

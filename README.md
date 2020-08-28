@@ -28,7 +28,7 @@ Please build a simple trading system as a pure REST API with the endpoints outli
 
 - `/tradingapp/api/orders/ (POST)`: Let users place a buy or sell trades.
 
-  - `stock: int` - ID of Stock to trade
+  - `stock: int/str` - `id: int` or `name: str` of Stock to trade.
   - `order_type: str` - Type of transaction either `buy` or `sell`
   - `quantity: int` - Number of shares to buy or sell
 

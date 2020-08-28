@@ -308,8 +308,7 @@ class StockEndpointTestCase(TradingAppEndpointTestCase):
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        endpoint = reverse(self.endpoint_stock_detail,
-                           kwargs={'name': self.TEST_STOCK_A})
+        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 1})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -326,14 +325,12 @@ class StockEndpointTestCase(TradingAppEndpointTestCase):
         self.login_user(USERB.get('username'))
 
         # Retrieve TEST_STOCK_A
-        endpoint = reverse(self.endpoint_stock_detail,
-                           kwargs={'name': self.TEST_STOCK_A})
+        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 1})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
         # Retrieve TEST_STOCK_B
-        endpoint = reverse(self.endpoint_stock_detail,
-                           kwargs={'name': self.TEST_STOCK_B})
+        endpoint = reverse(self.endpoint_stock_detail, kwargs={'pk': 2})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
 
@@ -348,7 +345,7 @@ class StockEndpointTestCase(TradingAppEndpointTestCase):
 
         # 1. Not invested
         endpoint = reverse(self.endpoint_stock_detail,
-                           kwargs={'name': self.TEST_STOCK_A})
+                           kwargs={'pk': 1})
         resp = self.client.get(endpoint)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         resp_data = resp.json()

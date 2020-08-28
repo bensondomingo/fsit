@@ -92,4 +92,5 @@ class OrderSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         ret = super().to_representation(instance)
         ret['trader'] = str(instance.trader)
+        ret['stock'] = str(instance.stock.name)
         return ret
